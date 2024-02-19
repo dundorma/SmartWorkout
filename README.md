@@ -5,6 +5,6 @@ Kelompok Walabi
 
 Ketua Kelompok: 
 
-Anggota 1: 
+Anggota 1: Moh Rizky Arif
 
 Anggota 2: 
