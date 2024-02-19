@@ -3,8 +3,8 @@ Stay fit with SmartWorkout
 
 Kelompok Walabi
 
-Ketua Kelompok: Muchammad Daniyal Kautsar
+Ketua Kelompok: 
 
-Anggota 1: Moh Rizky Arif
+Anggota 1: 
 
-Anggota 2: Rajendra Damar Setiyawan
+Anggota 2: 
