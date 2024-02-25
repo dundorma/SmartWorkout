@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Modul 2
-description: Modul 3 Senior Project 2024
+description: Modul 2 Senior Project 2024
 ---
 
 # Metodologi SDLC
