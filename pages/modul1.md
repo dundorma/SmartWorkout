@@ -20,6 +20,7 @@ SmartWorkout adalah aplikasi kebugaran (Fitness) yang mengimplementasikan teknol
 
 ## Analisis Kompetitor
 ### Kompetitor 1
+
 | Nama Kompetitor | [Fitbod](https://fitbod.me/) |
 |-|-|
 | Jenis Kompetitor | Direct |
@@ -39,6 +40,7 @@ SmartWorkout adalah aplikasi kebugaran (Fitness) yang mengimplementasikan teknol
 | Dilengkapi Tracker dan Feedback workout berbasis LLM |
 
 ### Kompetitor 2
+
 | Nama Kompetitor | [Nike Training Club App](https://www.nike.com/id/ntc-app) | 
 |-|-|
 | Jenis Kompetitor | Direct |
@@ -60,6 +62,7 @@ SmartWorkout adalah aplikasi kebugaran (Fitness) yang mengimplementasikan teknol
 | Dilengkapi Tracker dan Feedback workout berbasis LLM |
 
 ### Kompetitor 3
+
 | Nama Kompetitor | [Aaptiv](https://aaptiv.com/) | 
 |-|-|
 | Jenis Kompetitor | Direct |
