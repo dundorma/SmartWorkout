@@ -43,6 +43,12 @@ Produk yang dikembangkan bertujuan untuk membantu pengguna mencapai target aktiv
 ![ERD](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/erd.drawio.png)
 
 ## Lo-Fi Wireframe
+![Login](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/login-page.png)
+![Register](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/register-page.png)
+![Home](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/home-page.png)
+![Camera](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/camera-page.png)
+![Subscription](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/subscription-page.png)
+![Account](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/assets/account-page.png)
 
 ## Gantt Chart
 ![Gantt Chart](https://raw.githubusercontent.com/dundorma/SmartWorkout/master/gantt-chart.png)
