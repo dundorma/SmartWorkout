@@ -39,15 +39,19 @@ SmartWorkout adalah aplikasi kebugaran (Fitness) yang mengimplementasikan teknol
 | Dilengkapi Tracker dan Feedback workout berbasis LLM |
 
 ### Kompetitor 2
-| Nama Kompetitor | []() | 
+| Nama Kompetitor | [Nike Training Club App](https://www.nike.com/id/ntc-app) | 
 |-|-|
-| Jenis Kompetitor | |
-| Jenis Produk | |
-| Target Customer | |
+| Jenis Kompetitor | Direct |
+| Jenis Produk | Aplikasi Mobile |
+| Target Customer | Orang yang aktif berolahraga, tertarik dengan gaya hidup sehat, ingin menghemat biaya keanggotaan gym |
 
 | Kelebihan | Kekurangan |
 |-|-|
-| | |
+| Banyak pilihan latihan, seperti yoga, kardio, pilates, latihan kekuatan, dll | Beberapa fitur hanya tersedia dengan biaya |
+| Instruksi video berkualitas tinggi | Nike Training Club menampilkan iklan, yang dapat mengganggu bagi beberapa pengguna |
+| Program latihan yang dipersonalisasi | |
+| Ada komunitas online | |
+| Gratis | |
 
 | Key Competitive Advantage & Unique Value |
 |-|
@@ -56,15 +60,18 @@ SmartWorkout adalah aplikasi kebugaran (Fitness) yang mengimplementasikan teknol
 | Dilengkapi Tracker dan Feedback workout berbasis LLM |
 
 ### Kompetitor 3
-| Nama Kompetitor | []() | 
+| Nama Kompetitor | [Aaptiv](https://aaptiv.com/) | 
 |-|-|
-| Jenis Kompetitor | |
-| Jenis Produk | |
-| Target Customer | |
+| Jenis Kompetitor | Direct |
+| Jenis Produk | Aplikasi Mobile |
+| Target Customer | Orang-orang yang ingin berolahraga dengan audio-guided workouts, ingin berolahraga di rumah, ingin mendapatkan program latihan yang dipersonalisasi, ingin berolahraga dengan musik yang energik |
 
 | Kelebihan | Kekurangan |
 |-|-|
-| | |
+| Aaptiv menawarkan berbagai macam audio-guided workouts untuk berbagai tingkat kebugaran dan tujuan. | Pengguna tidak mendapatkan visualisasi latihan, yang dapat membingungkan bagi beberapa orang. |
+| Aaptiv memiliki instruktur yang dapat membantu pengguna tetaptermotivasi. | Aaptiv adalah aplikasi berbayar. Ada beberapa tingkatan harga yang tersedia, tetapi tidak ada versi gratis. |
+Aaptiv menawarkan berbagai macam musik yang energik untuk menemani latihan pengguna. | Kurangnya interaksi manusia |
+Aaptiv memiliki komunitas online yang aktif di mana pengguna dapat saling mendukung dan berbagi tips. | Hanya tersedia dalam bahasa Inggris |
 
 | Key Competitive Advantage & Unique Value |
 |-|
