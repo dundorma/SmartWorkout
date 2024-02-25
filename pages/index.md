@@ -11,4 +11,4 @@ Departemen Teknologi Elektro dan Teknologi Informasi, Fakultas
 Teknik, Universitas Gadjah Mada <br>
 
 ## Modul
-- [Modul 1]()
+- [Modul 1](./modul1.html)
