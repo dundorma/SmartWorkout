@@ -7,4 +7,6 @@ Ketua Kelompok:
 
 Anggota 1: Moh Rizky Arif
 
-Anggota 2: 
+Anggota 2: Rajendra Damar Setiyawan
+
+Anggota 3:
