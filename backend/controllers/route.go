@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/dundorma/SmartWorkout/models"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -28,7 +29,8 @@ func Route() *chi.Mux {
 		json.NewDecoder(r.Body).Decode(&u)
 		fmt.Printf("The user request value %v", u)
 
-		if u.Email == "test" && u.Password == "test" {
+		_, err := models.GetUserByEmailPassword(u.Email, u.Password)
+		if err != nil {
 			jwtToken := GetJwtConfig()
 			token, err := jwtToken.CreateToken(u.Email)
 			if err != nil {
