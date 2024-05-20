@@ -1,6 +1,7 @@
+from modules.llm import openai_chat
 from dotenv import load_dotenv
 
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import os
@@ -9,50 +10,26 @@ load_dotenv()
 
 app = Flask(__name__)
 # cors = CORS(app, resources={r"*": {"origins": "*"}})
-api = Api(app)
-
-class HomePage(Resource):
-    def get(self):
-        return 'Welcome to, API HomePage!'
-
-    def post(self):
-        try:
-            value = request.get_json()
-            if(value):
-                return {'Post Values': value}, 201
-
-            return {"error":"Invalid format."}
-
-        except Exception as error:
-            return {'error': error}
-
-class RecommendationFeedback(Resource):
-    def get(self):
-        return {"error":"Invalid Method."}
-
-    def post(self):
-        try:
-            return {}
-
-        except Exception as error:
-            return {'error': error}
-
-class Counter(Resource):
-    def get(self):
-        return {"error":"Invalid Method."}
-
-    def post(self):
-        try:
-            return {}
-
-        except Exception as error:
-            return {'error': error}
-
-
+# api = Api(app)
 ROOT_PATH = os.getenv('API_ROOT_PATH')
-api.add_resource(HomePage,'/')
-api.add_resource(Counter,f'{ROOT_PATH}/workout_counter')
-api.add_resource(RecommendationFeedback,f'{ROOT_PATH}/recommendation')
+
+@app.route("/")
+def index():
+    return 'Welcome to, API HomePage!'
+
+
+@app.route(f'{ROOT_PATH}/recommendation', methods=["GET", "POST"])
+def RecommendationFeedback():
+    message = request.json.get("message")
+    print(message)
+    response = openai_chat(message, model='llama3-8b-8192')
+    print(response)
+    return {'response':response}
+
+@app.route(f'{ROOT_PATH}/workout_counter', methods=["POST"])
+def Counter():
+    return {"error":"Invalid Method."}
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
