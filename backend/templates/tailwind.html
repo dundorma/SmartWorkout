@@ -1,0 +1,34 @@
+{{ define "header" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+   <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-gray-100">
+    <header class="bg-gradient-to-r from-blue-800 to-indigo-800">
+      <nav class="px-8 py-6 flex items-center text-white">
+      <div class="text-4xl pr-12 font-serif">SmartWorkout</div> 
+       <div class="flex-grow">
+         <a class="text-lg font-semibold hover:text-blue-100 pr-8" href="/">Home</a>
+         <a class="text-lg font-semibold hover:text-blue-100 pr-8" href="/contact">Contact</a>
+         <a class="text-lg font-semibold hover:text-blue-100 pr-8" href="/faq">Faq</a>
+       </div> 
+       <div>
+         <a href="signin">Sign in</a>
+         <a class="px-4 py-2 bg-blue-700 hover:bg-blue-600" href="/signup">Sign up</a>
+       </div>
+      </nav>
+    </header>
+{{ end }}
+  
+
+{{ define "footer" }}
+    <footer class="bg-gradient-to-r py-8 my-4 from-blue-800 to-indigo-800 text-white font-bold  flex items-center justify-center"> 
+      <p class="">Copyright Walabi @ 2024</p>
+    </footer>
+  </body>
+</html>
+{{ end }}
