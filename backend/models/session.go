@@ -8,6 +8,7 @@ type Session struct {
 	// Token is only set when creating a new session, When look up a session
 	// This will be left empty, as we only store the hash of a session token
 	// in our database and we cannot reverse it into a raw token.
+	Token     string
 	TokenHash string
 }
 
@@ -18,5 +19,9 @@ type SessionService struct {
 func (ss *SessionService) Create(userID int) (*Session, error) {
 	// TODO: create the session token
 	// TODO: Implement SessionService.Create
+	return nil, nil
+}
+
+func (ss *SessionService) User(token string) (*User, error) {
 	return nil, nil
 }
