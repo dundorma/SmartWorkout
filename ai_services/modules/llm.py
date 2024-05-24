@@ -5,7 +5,7 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 
 
-# @retry(wait=wait_random_exponential(multiplier=0.5, max=20), stop=stop_after_attempt(6))
+@retry(wait=wait_random_exponential(multiplier=0.5, max=20), stop=stop_after_attempt(6))
 def openai_chat(question, 
                 system_message="You are a helpful assistant.", 
                 model="gpt-3.5-turbo",

@@ -1,1 +1,4 @@
-flask
+flask==3.0.2
+openai==1.14.3
+python-dotenv==1.0.1
+tenacity==8.2.3
