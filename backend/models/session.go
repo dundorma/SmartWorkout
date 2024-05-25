@@ -78,9 +78,9 @@ func (ss *SessionService) User(token string) (*User, error) {
 	}
 
 	row = ss.DB.QueryRow(`
-		SELECT email, password
+		SELECT email, name, password
 		FROM users WHERE id = $1`, user.ID)
-	err = row.Scan(&user.Email, &user.Password)
+	err = row.Scan(&user.Email, &user.Name, &user.Password)
 	if err != nil {
 		return nil, fmt.Errorf("user: %w", err)
 	}

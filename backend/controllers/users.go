@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -17,6 +18,12 @@ type Users struct {
 	SessionService *models.SessionService
 }
 
+type UserOutput struct {
+	ID    int
+	Email string
+	Name  string
+}
+
 func (u Users) New(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Email string
@@ -26,7 +33,11 @@ func (u Users) New(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u Users) Create(w http.ResponseWriter, r *http.Request) {
-	user, err := u.UserService.Create(r.PostFormValue("email"), r.PostFormValue("password"))
+	user, err := u.UserService.Create(
+		r.PostFormValue("email"),
+		r.PostFormValue("name"),
+		r.PostFormValue("password"),
+	)
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)
@@ -96,7 +107,20 @@ func (u Users) CurrentUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "CurrentUser: %v\n", user.Email)
+	return_val := UserOutput{
+		ID:    user.ID,
+		Email: user.Email,
+		Name:  user.Name,
+	}
+
+	buff, err := json.Marshal(&return_val)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "error marshalling output", http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprint(w, string(buff))
 }
 
 func (u Users) ProcessSignOut(w http.ResponseWriter, r *http.Request) {
