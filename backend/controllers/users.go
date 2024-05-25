@@ -19,9 +19,9 @@ type Users struct {
 }
 
 type UserOutput struct {
-	ID    int
-	Email string
-	Name  string
+	ID    int    `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
 }
 
 func (u Users) New(w http.ResponseWriter, r *http.Request) {
