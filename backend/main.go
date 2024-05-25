@@ -62,6 +62,7 @@ func main() {
 	r.Post("/signup", userC.Create)
 	r.Get("/signin", userC.SignIn)
 	r.Post("/signin", userC.ProcessSignIn)
+	r.Post("/signout", userC.ProcessSignOut)
 	r.Get("/users/me", userC.CurrentUser)
 
 	csrfKey := "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
