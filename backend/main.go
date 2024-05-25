@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/dundorma/SmartWorkout/controllers"
+	"github.com/dundorma/SmartWorkout/migrations"
 	"github.com/dundorma/SmartWorkout/models"
 	"github.com/dundorma/SmartWorkout/templates"
 	"github.com/dundorma/SmartWorkout/views"
@@ -42,6 +43,11 @@ func main() {
 	}
 	defer db.Close()
 
+	err = models.MigrateFS(db, migrations.FS, ".")
+	if err != nil {
+		panic(err)
+	}
+
 	userService := models.UserService{
 		DB: db,
 	}
@@ -64,10 +70,16 @@ func main() {
 	r.Post("/signin", userC.ProcessSignIn)
 	r.Post("/signout", userC.ProcessSignOut)
 	r.Get("/users/me", userC.CurrentUser)
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Page not found", http.StatusNotFound)
+	})
 
+	umw := controllers.UserMiddleware{
+		SessionService: &sessionService,
+	}
 	csrfKey := "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
 	csrfMw := csrf.Protect([]byte(csrfKey), csrf.Secure(false))
 
 	fmt.Println("starting server at port 3000")
-	http.ListenAndServe(":3000", csrfMw(r))
+	http.ListenAndServe(":3000", csrfMw(umw.SetUser(r)))
 }
