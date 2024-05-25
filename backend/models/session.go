@@ -7,6 +7,11 @@ import (
 	"github.com/dundorma/SmartWorkout/rand"
 )
 
+const (
+	// The minimum number of bytes to be used for each session token
+	MinBytesPerToken = 32
+)
+
 type Session struct {
 	ID     int
 	UserID int
@@ -18,11 +23,17 @@ type Session struct {
 }
 
 type SessionService struct {
-	DB *sql.DB
+	DB            *sql.DB
+	BytesPerToken int
 }
 
 func (ss *SessionService) Create(userID int) (*Session, error) {
-	token, err := rand.SessionToken()
+	bytesPerToen := ss.BytesPerToken
+	if bytesPerToen < MinBytesPerToken {
+		bytesPerToen = MinBytesPerToken
+	}
+
+	token, err := rand.String(bytesPerToen)
 	if err != nil {
 		return nil, fmt.Errorf("create: %w", err)
 	}
