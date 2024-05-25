@@ -26,8 +26,6 @@ func (u Users) New(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u Users) Create(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Email: ", r.PostFormValue("email"))
-	fmt.Fprintln(w, "Password: ", r.PostFormValue("password"))
 	user, err := u.UserService.Create(r.PostFormValue("email"), r.PostFormValue("password"))
 	if err != nil {
 		fmt.Println(err)
@@ -98,5 +96,5 @@ func (u Users) CurrentUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "CurrentUser: %s\n", user.Email)
+	fmt.Fprintf(w, "CurrentUser: %v\n", user)
 }
