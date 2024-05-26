@@ -20,5 +20,5 @@ st.write("Here you can add some descriptive text about the camera preview.")
 #     # Display the camera preview
 #     st.image(img, caption="Camera Preview", use_column_width=True)
 
-# image = camera_input_live(debounce=33, height=480, width=int(16*480/9))
-# st.image(image)
+image = camera_input_live(debounce=100, height=480, width=int(16*480/9))
+st.image(image)
