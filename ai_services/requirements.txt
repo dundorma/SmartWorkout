@@ -1,0 +1,8 @@
+flask==3.0.2
+openai==1.14.3
+python-dotenv==1.0.1
+tenacity==8.2.3
+mediapipe==0.10.14
+opencv-python==4.9.0.80
+streamlit==1.35.0
+watchdog==4.0.1
