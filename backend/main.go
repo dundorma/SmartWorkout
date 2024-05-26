@@ -3,21 +3,66 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/dundorma/SmartWorkout/controllers"
 	"github.com/dundorma/SmartWorkout/migrations"
 	"github.com/dundorma/SmartWorkout/models"
 	"github.com/dundorma/SmartWorkout/templates"
 	"github.com/dundorma/SmartWorkout/views"
+	"github.com/joho/godotenv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/csrf"
 )
 
+type config struct {
+	PSQL models.PostgresConfig
+	SMTP models.SMTPConfig
+	CSRF struct {
+		Key    string
+		Secure bool
+	}
+	Server struct {
+		Address string
+	}
+}
+
+func loadEnvConfig() (config, error) {
+	var cfg config
+	err := godotenv.Load()
+	if err != nil {
+		return cfg, err
+	}
+	// TODO: PSQL
+	cfg.PSQL = models.DefaultPostgresConfig()
+
+	// TODO: SMTP
+	cfg.SMTP.Host = os.Getenv("SMTP_HOST")
+	cfg.SMTP.Port, err = strconv.Atoi(os.Getenv("SMTP_PORT"))
+	if err != nil {
+		panic(err)
+	}
+	cfg.SMTP.Username = os.Getenv("SMTP_USERNAME")
+	cfg.SMTP.Password = os.Getenv("SMTP_PASSWORD")
+
+	cfg.CSRF.Key = "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
+	cfg.CSRF.Secure = false
+
+	cfg.Server.Address = ":3000"
+
+	return cfg, nil
+}
+
 func main() {
+	cfg, err := loadEnvConfig()
+	if err != nil {
+		panic(err)
+	}
+
 	// SET UP DATABASE
-	cfg := models.DefaultPostgresConfig()
-	db, err := models.Open(cfg)
+	db, err := models.Open(cfg.PSQL)
 	if err != nil {
 		panic(err)
 	}
@@ -29,27 +74,41 @@ func main() {
 	}
 
 	// SETUP SERVICES
-	userService := models.UserService{
+	userService := &models.UserService{
 		DB: db,
 	}
-	sessionService := models.SessionService{
+	sessionService := &models.SessionService{
 		DB: db,
 	}
+	pwResetService := &models.PasswordResetService{
+		DB: db,
+	}
+	emailService := models.NewEmailService(cfg.SMTP)
 
 	// SETUP MIDDLEWARE
 	umw := controllers.UserMiddleware{
-		SessionService: &sessionService,
+		SessionService: sessionService,
 	}
-	csrfKey := "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
-	csrfMw := csrf.Protect([]byte(csrfKey), csrf.Secure(false))
+	csrfMw := csrf.Protect([]byte(cfg.CSRF.Key), csrf.Secure(cfg.CSRF.Secure))
 
 	// SETUP CONTROLLERS
 	userC := controllers.Users{
-		UserService:    &userService,
-		SessionService: &sessionService,
+		UserService:          userService,
+		SessionService:       sessionService,
+		PasswordResetService: pwResetService,
+		EmailService:         emailService,
 	}
 	userC.Templates.New = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
 	userC.Templates.SignIn = views.Must(views.ParseFS(templates.FS, "signin.html", "tailwind.html"))
+	userC.Templates.ForgotPassword = views.Must(
+		views.ParseFS(templates.FS, "forgot-pw.html", "tailwind.html"),
+	)
+	userC.Templates.CheckYourEmail = views.Must(
+		views.ParseFS(templates.FS, "check-your-email.html", "tailwind.html"),
+	)
+	userC.Templates.ResetPassword = views.Must(
+		views.ParseFS(templates.FS, "reset-pw.html", "tailwind.html"),
+	)
 
 	// SETUP ROUTER AND ROUTES
 	r := chi.NewRouter()
@@ -76,6 +135,10 @@ func main() {
 	r.Get("/signin", userC.SignIn)
 	r.Post("/signin", userC.ProcessSignIn)
 	r.Post("/signout", userC.ProcessSignOut)
+	r.Get("/forgot-pw", userC.ForgotPassword)
+	r.Post("/forgot-pw", userC.ProcessForgotPassword)
+	r.Get("/reset-pw", userC.ResetPassword)
+	r.Post("/reset-pw", userC.ProcessResetPassword)
 	r.Route("/users/me", func(r chi.Router) {
 		r.Use(umw.RequireUser)
 		r.Get("/", userC.CurrentUser)
@@ -85,6 +148,9 @@ func main() {
 	})
 
 	// START THE SERVER
-	fmt.Println("starting server at port 3000")
-	http.ListenAndServe(":3000", r)
+	fmt.Printf("starting server at %s...\n", cfg.Server.Address)
+	err = http.ListenAndServe(cfg.Server.Address, r)
+	if err != nil {
+		panic(err)
+	}
 }
