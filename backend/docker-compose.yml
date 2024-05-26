@@ -5,8 +5,8 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: lenslocked
-      POSTGRES_USER: xion
+      POSTGRES_DB: smartworkout
+      POSTGRES_USER: walabi
       POSTGRES_PASSWORD: supersecret
     ports:
       - "5432:5432"
