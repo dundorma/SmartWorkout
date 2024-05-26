@@ -11,14 +11,50 @@ import (
 	"github.com/dundorma/SmartWorkout/views"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/csrf"
 )
 
 func main() {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+	// SET UP DATABASE
+	cfg := models.DefaultPostgresConfig()
+	db, err := models.Open(cfg)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
 
+	err = models.MigrateFS(db, migrations.FS, ".")
+	if err != nil {
+		panic(err)
+	}
+
+	// SETUP SERVICES
+	userService := models.UserService{
+		DB: db,
+	}
+	sessionService := models.SessionService{
+		DB: db,
+	}
+
+	// SETUP MIDDLEWARE
+	umw := controllers.UserMiddleware{
+		SessionService: &sessionService,
+	}
+	csrfKey := "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
+	csrfMw := csrf.Protect([]byte(csrfKey), csrf.Secure(false))
+
+	// SETUP CONTROLLERS
+	userC := controllers.Users{
+		UserService:    &userService,
+		SessionService: &sessionService,
+	}
+	userC.Templates.New = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
+	userC.Templates.SignIn = views.Must(views.ParseFS(templates.FS, "signin.html", "tailwind.html"))
+
+	// SETUP ROUTER AND ROUTES
+	r := chi.NewRouter()
+	r.Use(csrfMw)
+	r.Use(umw.SetUser)
 	r.Get(
 		"/",
 		controllers.StaticHandler(
@@ -35,51 +71,20 @@ func main() {
 		"/faq",
 		controllers.FAQ(views.Must(views.ParseFS(templates.FS, "faq.html", "tailwind.html"))),
 	)
-
-	cfg := models.DefaultPostgresConfig()
-	db, err := models.Open(cfg)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	err = models.MigrateFS(db, migrations.FS, ".")
-	if err != nil {
-		panic(err)
-	}
-
-	userService := models.UserService{
-		DB: db,
-	}
-
-	sessionService := models.SessionService{
-		DB: db,
-	}
-
-	userC := controllers.Users{
-		UserService:    &userService,
-		SessionService: &sessionService,
-	}
-
-	userC.Templates.New = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
-	userC.Templates.SignIn = views.Must(views.ParseFS(templates.FS, "signin.html", "tailwind.html"))
-
 	r.Get("/signup", userC.New)
 	r.Post("/signup", userC.Create)
 	r.Get("/signin", userC.SignIn)
 	r.Post("/signin", userC.ProcessSignIn)
 	r.Post("/signout", userC.ProcessSignOut)
-	r.Get("/users/me", userC.CurrentUser)
+	r.Route("/users/me", func(r chi.Router) {
+		r.Use(umw.RequireUser)
+		r.Get("/", userC.CurrentUser)
+	})
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
 
-	umw := controllers.UserMiddleware{
-		SessionService: &sessionService,
-	}
-	csrfKey := "zTRUrqhAFWSH0NR6SsGpFRQn7KqLEvvh"
-	csrfMw := csrf.Protect([]byte(csrfKey), csrf.Secure(false))
-
+	// START THE SERVER
 	fmt.Println("starting server at port 3000")
-	http.ListenAndServe(":3000", csrfMw(umw.SetUser(r)))
+	http.ListenAndServe(":3000", r)
 }
