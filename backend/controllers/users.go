@@ -40,14 +40,44 @@ func (u Users) New(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u Users) Create(w http.ResponseWriter, r *http.Request) {
+	var data struct {
+		Email           string
+		Name            string
+		Password        string
+		PasswordConfirm string
+	}
+	data.Email = r.PostFormValue("email")
+	data.Name = r.PostFormValue("name")
+	data.Password = r.PostFormValue("password")
+	data.PasswordConfirm = r.PostFormValue("password-confirm")
+
+	if data.Password != data.PasswordConfirm {
+		u.Templates.New.Execute(
+			w,
+			r,
+			data,
+			fmt.Errorf("password and password confirmation doesn't matched"),
+		)
+		return
+	}
+	if len(data.Password) < 12 {
+		u.Templates.New.Execute(
+			w,
+			r,
+			data,
+			fmt.Errorf("password must be at least 12 characters long"),
+		)
+		return
+
+	}
+
 	user, err := u.UserService.Create(
-		r.PostFormValue("email"),
-		r.PostFormValue("name"),
-		r.PostFormValue("password"),
+		data.Email,
+		data.Name,
+		data.Password,
 	)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		u.Templates.New.Execute(w, r, data, err)
 		return
 	}
 
