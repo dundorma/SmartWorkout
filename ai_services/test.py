@@ -1,6 +1,8 @@
 import streamlit as st
 from PIL import Image
 from camera_input_live import camera_input_live
+from io import StringIO
+import base64 
 
 
 # Set up the Streamlit app layout
@@ -21,4 +23,6 @@ st.write("Here you can add some descriptive text about the camera preview.")
 #     st.image(img, caption="Camera Preview", use_column_width=True)
 
 image = camera_input_live(debounce=100, height=480, width=int(16*480/9))
-st.image(image)
+
+img = Image.open(image)
+st.image(img, output_format="WEBP")
